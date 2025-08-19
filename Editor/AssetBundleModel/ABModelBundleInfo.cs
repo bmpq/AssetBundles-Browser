@@ -190,11 +190,13 @@ namespace AssetBundleBrowser.AssetBundleModel
         {
             RefreshEmptyStatus();
             RefreshDupeAssetWarning();
+            RefreshIsImposter();
             var flag = m_BundleMessages.HighestMessageFlag();
             m_CachedHighMessage = MessageSystem.GetMessage(flag);
         }
         internal abstract bool RefreshEmptyStatus();
         internal abstract bool RefreshDupeAssetWarning();
+        internal abstract bool RefreshIsImposter();
         internal virtual MessageSystem.Message HighestMessage()
         {
             if (m_CachedHighMessage == null)
@@ -433,8 +435,6 @@ namespace AssetBundleBrowser.AssetBundleModel
                     m_IsImposterBundle = true;
                     asset.SetMessageFlag(MessageSystem.MessageFlag.Imposter, true);
                     m_BundleMessages.SetFlag(MessageSystem.MessageFlag.Imposter, true);
-
-                    break;
                 }
             }
 
@@ -530,6 +530,19 @@ namespace AssetBundleBrowser.AssetBundleModel
                     }
                 }
             }
+        }
+        internal override bool RefreshIsImposter()
+        {
+            foreach (var asset in m_ConcreteAssets)
+            {
+                if (asset != null && asset.isImposter)
+                {
+                    m_BundleMessages.SetFlag(MessageSystem.MessageFlag.Imposter, true);
+                    m_Dirty = true;
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal override bool RefreshDupeAssetWarning()
@@ -842,6 +855,11 @@ namespace AssetBundleBrowser.AssetBundleModel
             m_BundleMessages.SetFlag(MessageSystem.MessageFlag.WarningInChildren, dupeWarning);
             return dupeWarning;
         }
+        internal override bool RefreshIsImposter()
+        {
+            return false;
+        }
+
         internal override void AddAssetsToNode(AssetTreeItem node)
         {
             foreach (var child in m_Children)

@@ -48,6 +48,12 @@ namespace AssetBundleBrowser
             Color old = GUI.color;
             if ((bundleItem.bundle as AssetBundleModel.BundleVariantFolderInfo) != null)
                 GUI.color = AssetBundleModel.Model.k_LightGrey; //new Color(0.3f, 0.5f, 0.85f);
+
+            bundleItem.bundle.RefreshIsImposter();
+            bool isImposter = bundleItem.bundle.IsMessageSet(MessageSystem.MessageFlag.Imposter);
+            if (isImposter)
+                GUI.color = new Color(1f, 0.6f, 0.8f);
+
             base.RowGUI(args);
             GUI.color = old;
 
@@ -58,6 +64,11 @@ namespace AssetBundleBrowser
                 var right = args.rowRect.xMax;
                 Rect messageRect = new Rect(right - size, args.rowRect.yMin, size, size);
                 GUI.Label(messageRect, new GUIContent(message.icon, message.message ));
+
+                if (isImposter)
+                {
+                    GUI.Label(new Rect(right - size * 2f, args.rowRect.yMin, size * 2f, size), new GUIContent(EditorGUIUtility.IconContent("NetworkTransformVisualizer Icon").image));
+                }
             }
         }
 
