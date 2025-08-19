@@ -4,7 +4,7 @@ using UnityEngine;
 [InitializeOnLoad]
 public static class AssetImposterDataDrawer
 {
-    private const string CanonicalPathIDKey = "imposter.canonicalPathID";
+    public const string CanonicalPathIDKey = "imposter.canonicalPathID";
 
     static AssetImposterDataDrawer()
     {
@@ -44,7 +44,7 @@ public static class AssetImposterDataDrawer
         {
             if (!newIsImposter)
             {
-                AssetUserDataHelper.SetData(assetPath, CanonicalPathIDKey, null);
+                AssetUserDataHelper.RemoveKey(assetPath, CanonicalPathIDKey);
                 Debug.Log($"Removed Imposter flag from: {assetPath}");
             }
             else if (newPathID != currentPathID || newIsImposter != isImposter)

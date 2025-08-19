@@ -278,6 +278,7 @@ namespace AssetBundleBrowser.AssetBundleModel
         protected int m_ConcreteCounter;
         protected int m_DependentCounter;
         protected bool m_IsSceneBundle;
+        protected bool m_IsImposterBundle;
         protected long m_TotalSize;
 
         internal BundleDataInfo(string name, BundleFolderInfo parent) : base(name, parent)
@@ -326,6 +327,7 @@ namespace AssetBundleBrowser.AssetBundleModel
             m_ConcreteAssets.Clear();
             m_TotalSize = 0;
             m_IsSceneBundle = false;
+            m_IsImposterBundle = false;
 
             foreach (var asset in m_DependentAssets)
             {
@@ -401,6 +403,8 @@ namespace AssetBundleBrowser.AssetBundleModel
                             m_IsSceneBundle = true;
                             m_ConcreteAssets.Last().isScene = true;
                         }
+
+                        newAsset.imposterCanonicalPathID = AssetUserDataHelper.GetData<long>(assetName, AssetImposterDataDrawer.CanonicalPathIDKey);
                     }
                 }
             }
@@ -419,6 +423,18 @@ namespace AssetBundleBrowser.AssetBundleModel
                         asset.SetMessageFlag(MessageSystem.MessageFlag.SceneBundleConflict, true);
                         m_BundleMessages.SetFlag(MessageSystem.MessageFlag.SceneBundleConflict, true);
                     }
+                }
+            }
+
+            foreach (var asset in m_ConcreteAssets)
+            {
+                if (asset.isImposter)
+                {
+                    m_IsImposterBundle = true;
+                    asset.SetMessageFlag(MessageSystem.MessageFlag.Imposter, true);
+                    m_BundleMessages.SetFlag(MessageSystem.MessageFlag.Imposter, true);
+
+                    break;
                 }
             }
 

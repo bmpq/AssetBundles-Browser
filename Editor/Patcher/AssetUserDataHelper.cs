@@ -4,6 +4,20 @@ using System.Collections.Generic;
 
 public static class AssetUserDataHelper
 {
+    public static void RemoveKey(string assetPath, string key)
+    {
+        AssetImporter importer = AssetImporter.GetAtPath(assetPath);
+        if (importer == null) return;
+
+        var userData = Deserialize(importer.userData);
+
+        if (userData.ContainsKey(key))
+            userData.Remove(key);
+
+        importer.userData = Serialize(userData);
+        importer.SaveAndReimport();
+    }
+
     public static void SetData(string assetPath, string key, object value)
     {
         AssetImporter importer = AssetImporter.GetAtPath(assetPath);

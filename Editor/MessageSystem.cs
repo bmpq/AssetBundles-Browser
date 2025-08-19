@@ -23,6 +23,7 @@ namespace AssetBundleBrowser
             Info = 0x80,                  //this flag is only used to check bits, not set.
             EmptyBundle = 0x81,
             EmptyFolder = 0x82,
+            Imposter = 0x83,
 
             Warning = 0x8000,                  //this flag is only used to check bits, not set.
             WarningInChildren = 0x8100,
@@ -186,6 +187,7 @@ namespace AssetBundleBrowser
             s_MessageLookup.Add(MessageFlag.None, new Message(string.Empty, MessageType.None));
             s_MessageLookup.Add(MessageFlag.EmptyBundle, new Message("This bundle is empty.  Empty bundles cannot get saved with the scene and will disappear from this list if Unity restarts or if various other bundle rename or move events occur.", MessageType.Info));
             s_MessageLookup.Add(MessageFlag.EmptyFolder, new Message("This folder is either empty or contains only empty children.  Empty bundles cannot get saved with the scene and will disappear from this list if Unity restarts or if various other bundle rename or move events occur.", MessageType.Info));
+            s_MessageLookup.Add(MessageFlag.Imposter, new Message("This is an imposter bundle. It won't be exported.", MessageType.Info));
             s_MessageLookup.Add(MessageFlag.WarningInChildren, new Message("Warning in child(ren)", MessageType.Warning));
             s_MessageLookup.Add(MessageFlag.AssetsDuplicatedInMultBundles, new Message("Assets being pulled into this bundle due to dependencies are also being pulled into another bundle.  This will cause duplication in memory", MessageType.Warning));
             s_MessageLookup.Add(MessageFlag.VariantBundleMismatch, new Message("Variants of a given bundle must have exactly the same assets between them based on a Name.Extension (without Path) comparison. These bundle variants fail that check.", MessageType.Warning));

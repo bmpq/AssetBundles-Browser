@@ -72,6 +72,8 @@ namespace AssetBundleBrowser.AssetBundleModel
     {
         internal bool isScene { get; set; }
         internal bool isFolder { get; set; }
+        internal bool isImposter => imposterCanonicalPathID != default;
+        internal long imposterCanonicalPathID { get; set; }
         internal long fileSize;
 
         private HashSet<string> m_Parents;
@@ -160,6 +162,13 @@ namespace AssetBundleBrowser.AssetBundleModel
                 }
                 message = message.Substring(0, message.Length - 2);//remove trailing comma.
                 messages.Add(new MessageSystem.Message(message, MessageType.Warning));
+            }
+            if (IsMessageSet(MessageSystem.MessageFlag.Imposter))
+            {
+                string message = "This asset is marked as an imposter asset.\n";
+                message += "It points to PathID:\n";
+                message += imposterCanonicalPathID.ToString();
+                messages.Add(new MessageSystem.Message(message, MessageType.Info));
             }
 
             if (System.String.IsNullOrEmpty(m_BundleName) && m_Parents.Count > 0)
