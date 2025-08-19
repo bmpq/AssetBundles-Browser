@@ -1,13 +1,24 @@
 {
     "name": "Unity.AssetBundleBrowser.Editor.Tests",
+    "rootNamespace": "",
     "references": [
-        "Unity.AssetBundleBrowser.Editor"
+        "Unity.AssetBundleBrowser.Editor",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
-	"optionalUnityReferences": [
-        "TestAssemblies"
-    ],
-    "includePlatforms": [
+    "includePlatforms": [],
+    "excludePlatforms": [
         "Editor"
     ],
-    "excludePlatforms": []
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
