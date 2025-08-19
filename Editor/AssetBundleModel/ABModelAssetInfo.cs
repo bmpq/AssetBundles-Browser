@@ -165,8 +165,8 @@ namespace AssetBundleBrowser.AssetBundleModel
             }
             if (IsMessageSet(MessageSystem.MessageFlag.Imposter))
             {
-                string message = "This asset is marked as an imposter asset.\n";
-                message += "It points to PathID:\n";
+                string message = "This asset is marked as an imposter asset - the whole bundle will be treated as an imposter bundle.\n";
+                message += "This asset points to PathID:\n";
                 message += imposterCanonicalPathID.ToString();
                 messages.Add(new MessageSystem.Message(message, MessageType.Info));
             }
