@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 using AssetBundleBrowser.AssetBundleDataSource;
+using AssetBundleBrowser.Imposter;
 
 namespace AssetBundleBrowser
 {
@@ -356,7 +357,7 @@ namespace AssetBundleBrowser
                 m_InspectTab.RefreshBundles();
             };
 
-            AssetBundleModel.Model.DataSource.BuildAssetBundles (buildInfo);
+            ImposterBuilder.BuildAssetBundles(buildInfo, AssetBundleModel.Model.DataSource);
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 

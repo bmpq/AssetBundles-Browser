@@ -406,7 +406,7 @@ namespace AssetBundleBrowser.AssetBundleModel
                             m_ConcreteAssets.Last().isScene = true;
                         }
 
-                        newAsset.imposterCanonicalPathID = AssetUserDataHelper.GetData<long>(assetName, AssetImposterDataDrawer.CanonicalPathIDKey);
+                        newAsset.imposterCanonicalPathID = AssetUserDataHelper.GetData<long>(assetName, Imposter.ImposterBuilder.CanonicalPathIDKey);
                     }
                 }
             }

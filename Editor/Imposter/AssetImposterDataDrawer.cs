@@ -1,11 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 
+using AssetBundleBrowser.Imposter;
+
 [InitializeOnLoad]
 public static class AssetImposterDataDrawer
 {
-    public const string CanonicalPathIDKey = "imposter.canonicalPathID";
-    public const string CanonicalCabIDKey = "imposter.canonicalCabID";
+    private static string CanonicalPathIDKey => ImposterBuilder.CanonicalPathIDKey;
+    private static string CanonicalCabIDKey => ImposterBuilder.CanonicalCabIDKey;
 
     static AssetImposterDataDrawer()
     {
