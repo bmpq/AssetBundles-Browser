@@ -6,6 +6,7 @@ using UnityEditor.Build.Pipeline.Interfaces;
 using AssetBundleBrowser.AssetBundleDataSource;
 using System.Collections.Generic;
 using BuildCompression = UnityEngine.BuildCompression;
+using System.IO;
 
 
 namespace AssetBundleBrowser.Imposter
@@ -83,6 +84,16 @@ namespace AssetBundleBrowser.Imposter
 
                 foreach (var kvp in results.BundleInfos)
                 {
+                    string fullAbsPath = ResolveBuildPath(kvp.Value.FileName);
+                    if (IsImposterBundle(kvp.Key))
+                    {
+                        if (File.Exists(fullAbsPath))
+                        {
+                            File.Delete(fullAbsPath);
+                            Debug.Log($"Deleted temporary imposter bundle build: {fullAbsPath}");
+                        }
+                    }
+
                     info.onBuild?.Invoke(kvp.Key);
                 }
                 return true;
@@ -90,6 +101,44 @@ namespace AssetBundleBrowser.Imposter
 
             Debug.LogError($"AssetBundle build failed with ReturnCode: {exitCode}");
             return false;
+        }
+
+        public static bool IsImposterBundle(string bundleName)
+        {
+            var assetPaths = AssetDatabase.GetAssetPathsFromAssetBundle(bundleName);
+            foreach (var assetPath in assetPaths)
+            {
+                if (AssetUserDataHelper.GetData<long>(assetPath, CanonicalPathIDKey) != default)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static string ResolveBuildPath(string inputPath)
+        {
+            if (string.IsNullOrEmpty(inputPath))
+            {
+                return GetProjectRootPath();
+            }
+
+            if (Path.IsPathRooted(inputPath))
+            {
+                return Path.GetFullPath(inputPath);
+            }
+            else
+            {
+                string projectRoot = GetProjectRootPath();
+                string combinedPath = Path.Combine(projectRoot, inputPath);
+
+                return Path.GetFullPath(combinedPath);
+            }
+        }
+
+        public static string GetProjectRootPath()
+        {
+            return Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
         }
     }
 }
