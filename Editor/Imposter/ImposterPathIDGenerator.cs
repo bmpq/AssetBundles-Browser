@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Content;
 using UnityEditor.Build.Pipeline;
@@ -5,11 +6,12 @@ using UnityEditor.Build.Pipeline.Interfaces;
 
 namespace AssetBundleBrowser
 {
-    public class ImposterPathIDGenerator : IDeterministicIdentifiers
+    public class ImposterIdentifierGenerator : IDeterministicIdentifiers
     {
         private readonly IDeterministicIdentifiers m_FallbackGenerator;
+        public Dictionary<string, string> CustomCabIdMap { get; } = new Dictionary<string, string>();
 
-        public ImposterPathIDGenerator()
+        public ImposterIdentifierGenerator()
         {
             m_FallbackGenerator = new PrefabPackedIdentifiers();
         }
@@ -28,9 +30,14 @@ namespace AssetBundleBrowser
             return m_FallbackGenerator.SerializationIndexFromObjectIdentifier(objectID);
         }
 
-        public string GenerateInternalFileName(string name)
+        public string GenerateInternalFileName(string bundleName)
         {
-            return m_FallbackGenerator.GenerateInternalFileName(name);
+            if (CustomCabIdMap.TryGetValue(bundleName, out string customCabId))
+            {
+                return customCabId;
+            }
+
+            return m_FallbackGenerator.GenerateInternalFileName(bundleName);
         }
     }
 }

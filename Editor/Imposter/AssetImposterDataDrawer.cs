@@ -34,8 +34,16 @@ public static class AssetImposterDataDrawer
 
         EditorGUI.BeginChangeCheck();
 
-        GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal(); 
+
+        Color old = GUI.color;
+        if (isImposter)
+            GUI.color = new Color(1f, 0.6f, 0.8f);
+
         bool newIsImposter = EditorGUILayout.ToggleLeft("Is Imposter", isImposter);
+
+        GUI.color = old;
+
         GUILayout.EndHorizontal();
 
         long newPathID = currentPathID;
@@ -84,7 +92,7 @@ public static class AssetImposterDataDrawer
                 hasChanged = true;
             }
 
-            if (newCabID != currentCabID && newCabID.Length == 32)
+            if (newCabID != currentCabID)
             {
                 AssetUserDataHelper.SetData(assetPath, CanonicalCabIDKey, newCabID);
                 Debug.Log($"Set Imposter CabID on {assetPath} to: {newCabID}");

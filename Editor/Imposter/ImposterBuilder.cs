@@ -17,15 +17,28 @@ namespace AssetBundleBrowser.Imposter
 
         public static bool BuildAssetBundles(ABBuildInfo info, ABDataSource dataSource)
         {
+            var customIdGenerator = new ImposterIdentifierGenerator();
+
             var allBundleNames = dataSource.GetAllAssetBundleNames();
             var assetBundleBuilds = new List<AssetBundleBuild>();
             foreach (var bundleName in allBundleNames)
             {
+                var assetPaths = dataSource.GetAssetPathsFromAssetBundle(bundleName);
                 assetBundleBuilds.Add(new AssetBundleBuild
                 {
                     assetBundleName = bundleName,
-                    assetNames = dataSource.GetAssetPathsFromAssetBundle(bundleName)
+                    assetNames = assetPaths
                 });
+
+                if (assetPaths.Length > 0)
+                {
+                    string customCabId = AssetUserDataHelper.GetData<string>(assetPaths[0], CanonicalCabIDKey);
+                    if (!string.IsNullOrEmpty(customCabId))
+                    {
+                        customIdGenerator.CustomCabIdMap[bundleName] = customCabId;
+                        Debug.Log($"Mapping bundle '{bundleName}' to custom CAB ID: '{customCabId}'");
+                    }
+                }
             }
 
             if (assetBundleBuilds.Count == 0)
@@ -52,8 +65,6 @@ namespace AssetBundleBrowser.Imposter
                 buildParams.BundleCompression = BuildCompression.Uncompressed;
             else
                 buildParams.BundleCompression = BuildCompression.LZMA;
-
-            var customIdGenerator = new ImposterPathIDGenerator();
 
             IBundleBuildResults results;
             var taskList = DefaultBuildTasks.Create(DefaultBuildTasks.Preset.AssetBundleCompatible);
