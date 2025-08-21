@@ -58,6 +58,24 @@ public static class AssetImposterDataDrawer
 
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Replaced with CabID", GUILayout.Width(130));
+
+            if (!string.IsNullOrEmpty(importer.assetBundleName) && string.IsNullOrEmpty(currentCabID))
+            {
+                string[] allAssetPathsInBundle = AssetDatabase.GetAssetPathsFromAssetBundle(importer.assetBundleName);
+                foreach (var otherAssetPath in allAssetPathsInBundle)
+                {
+                    string otherCabID = AssetUserDataHelper.GetData<string>(otherAssetPath, CanonicalCabIDKey);
+                    if (!string.IsNullOrEmpty(otherCabID))
+                    {
+                        currentCabID = otherCabID;
+                        newCabID = otherCabID; 
+                        AssetUserDataHelper.SetData(assetPath, CanonicalCabIDKey, otherCabID);
+                        break;
+                    }
+                }
+
+            }
+
             newCabID = EditorGUILayout.TextField(currentCabID);
             GUILayout.EndHorizontal();
         }
