@@ -8,6 +8,7 @@
 	"keywords": ["asset", "bundle", "bundles", "assetbundles"],
 	"category": "Asset Bundles",
 	"dependencies": {
-		"com.unity.scriptablebuildpipeline": "2.1.5"
+		"com.unity.scriptablebuildpipeline": "2.1.5",
+		"com.unity.nuget.newtonsoft-json": "3.2.1"
 	}
 }
